@@ -1,0 +1,60 @@
+@import "@fontsource-variable/literata";
+@import "@fontsource-variable/source-sans-3";
+
+:root {
+  --canvas: oklch(96.8% 0.012 79);
+  --paper: oklch(99% 0.006 82);
+  --ink: oklch(22% 0.018 58);
+  --muted: oklch(48% 0.018 62);
+  --rule: oklch(84% 0.018 74);
+  --rule-strong: oklch(64% 0.035 68);
+  --accent: oklch(55% 0.18 35);
+  --accent-dark: oklch(43% 0.15 35);
+  --moss: oklch(44% 0.065 142);
+  --amber: oklch(57% 0.11 78);
+  --serif: "Literata Variable", "Songti SC", "Noto Serif CJK SC", serif;
+  --sans: "Source Sans 3 Variable", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 12px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+a { color: inherit; }
+button, input, select { font: inherit; }
+button, a, input, select { touch-action: manipulation; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--accent), transparent 25%);
+  outline-offset: 3px;
+}
+::selection { background: color-mix(in oklch, var(--accent), white 70%); }
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 12px;
+  left: 12px;
+  transform: translateY(-160%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+}
+.skip-link:focus { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

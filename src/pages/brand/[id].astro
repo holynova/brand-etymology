@@ -1,0 +1,115 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BrandLogo from "../../components/BrandLogo.astro";
+import styles from "../../styles/site.module.css";
+import { countryMeta } from "../../lib/taxonomy";
+import { sitePath } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("brands");
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry, entries } }));
+}
+
+const { entry, entries } = Astro.props;
+const item = entry.data;
+const byId = new Map(entries.map((candidate) => [candidate.id, candidate]));
+const related = item.related
+  .map((id: string) => byId.get(id))
+  .filter((candidate): candidate is NonNullable<typeof candidate> => candidate !== undefined);
+const confidence = {
+  confirmed: { label: "已确认", note: "核心命名说法由品牌资料明确支持。" },
+  probable: { label: "较可信", note: "主要来源一致，但仍缺少一项独立语言或档案证据。" },
+  disputed: { label: "存在争议", note: "流传着不止一种解释，本页保留差异。" },
+}[item.confidence];
+---
+
+<BaseLayout title={`${item.name} 名称从哪里来｜名从何来`} description={item.story}>
+  <article data-pagefind-body>
+    <div class={`${styles.shell} ${styles.detailHero}`}>
+      <a class={styles.back} href={sitePath("/#catalog")}>← 返回全部词条</a>
+      <div class={styles.detailGrid}>
+        <div class={styles.detailIdentity}>
+          <BrandLogo id={entry.id} name={item.name} detail />
+          <div>
+            <p class={styles.eyebrow}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded}</p>
+            <h1 class={styles.detailTitle} data-pagefind-meta="title">
+              <span lang="en">{item.name}</span>
+              <span class={styles.detailNative}>{item.nativeName}</span>
+            </h1>
+          </div>
+        </div>
+        <p class={styles.lead}>{item.story}</p>
+      </div>
+      <span data-pagefind-filter={`country:${item.country}`}></span>
+      <span data-pagefind-filter={`category:${item.category}`}></span>
+      <span data-pagefind-meta={`native:${item.nativeName}`}></span>
+    </div>
+
+    <div class={`${styles.shell} ${styles.detailBody}`}>
+      <aside class={styles.aside}>
+        <div class={styles.pronounce}>
+          <p class={styles.eyebrow}>怎么读</p>
+          <p class={styles.pronounceIpa}>{item.ipa}</p>
+          <p>{item.reading}</p>
+          <div class={styles.confidence} data-level={item.confidence}>{confidence.label}</div>
+          <p class={styles.entryMeta}>{confidence.note}</p>
+        </div>
+      </aside>
+
+      <div>
+        <section class={styles.section}>
+          <h2 class={styles.sectionTitle}>命名背景</h2>
+          <p class={styles.definition}>{item.background}</p>
+          <div>{item.methods.map((method: string) => <span class={styles.tag}>{method}</span>)}</div>
+        </section>
+
+        <section class={styles.section}>
+          <h2 class={styles.sectionTitle}>命名谱系</h2>
+          <div class={styles.lineage} aria-label={`${item.name} 的命名谱系`}>
+            {item.roots.map((root: { label: string; language: string; meaning: string }, index: number) => (
+              <div class={styles.root} style={`animation-delay:${index * 100}ms`}>
+                <div class={styles.rootLanguage}>{root.language}</div>
+                <div class={styles.rootLabel}>{root.label}</div>
+                <p class={styles.rootMeaning}>{root.meaning}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section class={styles.section}>
+          <h2 class={styles.sectionTitle}>可信来源</h2>
+          <ol class={styles.sources}>
+            {item.sources.map((source: { title: string; publisher: string; url: string; supports: string }, index: number) => (
+              <li class={styles.source}>
+                <span class={styles.sourceIndex}>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <a href={source.url} rel="noreferrer" target="_blank">{source.title} ↗</a>
+                  <small>{source.publisher} · 支持：{source.supports}</small>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p class={styles.entryMeta}>资料核验日期：{item.verifiedAt}。外部链接仅在你点击后访问网络。</p>
+        </section>
+
+        {related.length > 0 && (
+          <section class={styles.section}>
+            <h2 class={styles.sectionTitle}>相似命名</h2>
+            <div class={styles.relatedList}>
+              {related.map((candidate) => (
+                <a class={styles.relatedItem} href={sitePath(`/brand/${candidate.id}/`)}>
+                  <BrandLogo id={candidate.id} name={candidate.data.name} compact />
+                  <div>
+                    <strong>{candidate.data.name}</strong>
+                    <span><span class={styles.flag} aria-hidden="true">{countryMeta[candidate.data.countryCode].flag}</span>{candidate.data.country} · {candidate.data.methods[0]}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CompactBrandList from "../../components/CompactBrandList.astro";
+import styles from "../../styles/site.module.css";
+import { countryMeta } from "../../lib/taxonomy";
+import { sitePath } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("brands");
+  const codes = [...new Set(entries.map((entry) => entry.data.countryCode))];
+  return codes.map((code) => ({
+    params: { code: code.toLowerCase() },
+    props: { entries: entries.filter((entry) => entry.data.countryCode === code).sort((a, b) => a.data.countryRank - b.data.countryRank) },
+  }));
+}
+
+const { entries } = Astro.props;
+const country = entries[0].data.country;
+const countryCode = entries[0].data.countryCode;
+---
+<BaseLayout title={`${country}品牌名称词源｜名从何来`}>
+  <div class={styles.shell}>
+    <header class={styles.countryHeader}>
+      <a class={styles.back} href={sitePath("/")}>← 返回搜索</a>
+      <p class={styles.eyebrow}>COUNTRY INDEX · {entries.length} ENTRIES</p>
+      <h1><span class={styles.countryFlag} aria-hidden="true">{countryMeta[countryCode].flag}</span>{country}品牌，从名字读一遍。</h1>
+    </header>
+    <CompactBrandList entries={entries} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import styles from "../styles/site.module.css";
+import { sitePath } from "../lib/paths";
+---
+<BaseLayout title="没有这个词条｜名从何来">
+  <article class={`${styles.shell} ${styles.prose}`}>
+    <p class={styles.eyebrow}>404 · LOST ETYMON</p>
+    <h1>这条名字的来路，暂时断了。</h1>
+    <p>它可能改过名，也可能还没进入档案。回到首页换一种拼写、中文名或原文名试试。</p>
+    <p><a href={sitePath("/")}>← 回到搜索</a></p>
+  </article>
+</BaseLayout>

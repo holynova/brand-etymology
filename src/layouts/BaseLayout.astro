@@ -1,0 +1,58 @@
+---
+import "../styles/global.css";
+import styles from "../styles/site.module.css";
+import { sitePath } from "../lib/paths";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "名从何来｜英语品牌词源解析",
+  description = "用简洁故事解释品牌名、产品名与互联网词汇的词源、读音和文化背景。",
+} = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f5efe4" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+    <header class={styles.header}>
+      <div class={`${styles.shell} ${styles.headerInner}`}>
+        <a class={styles.brand} href={sitePath("/")}>
+          <span class={styles.brandMark} aria-hidden="true"></span>
+          <span>名从何来</span>
+          <span class={styles.brandSmall}>BRAND ETYMOLOGY</span>
+        </a>
+        <nav class={styles.nav} aria-label="主导航">
+          <a href={sitePath("/#catalog")}>词条</a>
+          <a href={sitePath("/method/")}>方法</a>
+          <a href={sitePath("/about/")}>关于</a>
+          <a class={styles.githubLink} href="https://github.com/holynova/brand-etymology" rel="noreferrer" target="_blank">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main-content"><slot /></main>
+    <footer class={styles.footer}>
+      <div class={`${styles.shell} ${styles.footerInner}`}>
+        <span>名称会讲故事，来源让故事站得住。</span>
+        <span class={styles.footerLinks}>
+          <a href="https://github.com/holynova/brand-etymology" rel="noreferrer" target="_blank">GitHub</a>
+          <a href={sitePath("/privacy/")}>隐私</a>
+          <a href={sitePath("/terms/")}>使用说明</a>
+          <a href={sitePath("/method/")}>资料方法</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

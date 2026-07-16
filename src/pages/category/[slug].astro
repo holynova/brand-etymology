@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CompactBrandList from "../../components/CompactBrandList.astro";
+import styles from "../../styles/site.module.css";
+import { categorySlugs } from "../../lib/taxonomy";
+import { sitePath } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("brands");
+  return Object.entries(categorySlugs).map(([category, slug]) => ({
+    params: { slug },
+    props: { category, entries: entries.filter((entry) => entry.data.category === category).sort((a, b) => a.data.name.localeCompare(b.data.name, "en")) },
+  }));
+}
+
+const { category, entries } = Astro.props;
+---
+<BaseLayout title={`${category}品牌名称词源｜名从何来`}>
+  <div class={styles.shell}>
+    <header class={styles.countryHeader}>
+      <a class={styles.back} href={sitePath("/")}>← 返回搜索</a>
+      <p class={styles.eyebrow}>CATEGORY INDEX · {entries.length} ENTRIES</p>
+      <h1>{category}，如何给自己命名。</h1>
+    </header>
+    <CompactBrandList entries={entries} />
+  </div>
+</BaseLayout>

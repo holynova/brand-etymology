@@ -1,0 +1,177 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BrandLogo from "../components/BrandLogo.astro";
+import styles from "../styles/site.module.css";
+import { countryMeta } from "../lib/taxonomy";
+import { sitePath } from "../lib/paths";
+
+const entries = (await getCollection("brands")).sort((a, b) =>
+  a.data.country.localeCompare(b.data.country, "zh-CN") || a.data.countryRank - b.data.countryRank
+);
+const countries = [...new Set(entries.map((entry) => entry.data.country))];
+const categories = [...new Set(entries.map((entry) => entry.data.category))];
+const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "有争议" };
+---
+
+<BaseLayout>
+  <div class={styles.shell}>
+    <section class={styles.hero} aria-labelledby="hero-title">
+      <div>
+        <p class={styles.eyebrow}>词源 · 读音 · 文化背景 · 可核验来源</p>
+        <h1 id="hero-title" class={styles.heroTitle}><span lang="zh">每个名字，都藏着一条来路。</span></h1>
+      </div>
+      <p class={styles.heroNote}>
+        <span class={styles.heroStat}>{entries.length}</span>
+        个经过结构化整理的黄金样本。从一粒“小米”、一位胜利女神，到一条名为 Adobe 的小溪。
+      </p>
+    </section>
+
+    <section class={styles.searchSection} aria-label="搜索与筛选">
+      <form id="search-form" class={styles.searchBar} role="search">
+        <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />
+        <button class={styles.searchButton} type="submit">查名字</button>
+      </form>
+      <div class={styles.filters}>
+        <div class={styles.field}>
+          <label for="country">国家</label>
+          <select id="country" class={styles.select}>
+            <option value="">全部国家</option>
+            {countries.map((country) => {
+              const entry = entries.find((item) => item.data.country === country)!;
+              return <option value={country}>{countryMeta[entry.data.countryCode].flag} {country}</option>;
+            })}
+          </select>
+        </div>
+        <div class={styles.field}>
+          <label for="category">类别</label>
+          <select id="category" class={styles.select}>
+            <option value="">全部类别</option>
+            {categories.map((category) => <option value={category}>{category}</option>)}
+          </select>
+        </div>
+        <div class={styles.field}>
+          <label for="sort">排序</label>
+          <select id="sort" class={styles.select}>
+            <option value="rank">国家榜单位次</option>
+            <option value="name">名称 A–Z</option>
+            <option value="year">创立年份</option>
+            <option value="confidence">可信度</option>
+          </select>
+        </div>
+      </div>
+      <div class={styles.resultMeta} aria-live="polite">
+        <span id="result-count">显示 {entries.length} 个词条</span>
+        <button id="clear" class={styles.clearButton} type="button">清除条件</button>
+      </div>
+    </section>
+
+    <section id="catalog" class={styles.catalog} aria-label="品牌词条" data-pagefind-ignore>
+      {entries.map((entry, index) => {
+        const item = entry.data;
+        const searchText = [item.name, item.nativeName, item.zhName, ...item.aliases, item.country, item.category, ...item.methods, item.story].join(" ").toLocaleLowerCase();
+        return (
+          <article
+            class={styles.entry}
+            data-entry
+            data-search={searchText}
+            data-country={item.country}
+            data-category={item.category}
+            data-rank={item.countryRank}
+            data-name={item.name}
+            data-year={item.founded}
+            data-confidence={item.confidence}
+            style={`animation-delay:${Math.min(index, 10) * 45}ms`}
+          >
+            <div class={styles.rank}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {String(item.countryRank).padStart(2, "0")}</div>
+            <div class={styles.brandIdentity}>
+              <BrandLogo id={entry.id} name={item.name} />
+              <h2 class={styles.entryName}>
+                <a href={sitePath(`/brand/${entry.id}/`)}>{item.name}</a>
+                <span class={styles.native} lang={item.countryCode === "JP" ? "ja" : item.countryCode === "KR" ? "ko" : "zh"}>{item.nativeName}</span>
+              </h2>
+            </div>
+            <p class={styles.entryStory}>{item.story}</p>
+            <div class={styles.entryMeta}>
+              <span class={styles.tag}>{item.category}</span>
+              <span class={styles.tag}>{item.methods[0]}</span>
+              <div class={styles.confidence} data-level={item.confidence}>{confidenceLabel[item.confidence]}</div>
+            </div>
+          </article>
+        );
+      })}
+      <p id="empty" class={styles.empty} hidden>没有找到这个名字。试试别名、原文写法或命名方法。</p>
+    </section>
+  </div>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>("#search-form");
+    const input = document.querySelector<HTMLInputElement>("#search");
+    const country = document.querySelector<HTMLSelectElement>("#country");
+    const category = document.querySelector<HTMLSelectElement>("#category");
+    const sort = document.querySelector<HTMLSelectElement>("#sort");
+    const clear = document.querySelector<HTMLButtonElement>("#clear");
+    const catalog = document.querySelector<HTMLElement>("#catalog");
+    const count = document.querySelector<HTMLElement>("#result-count");
+    const empty = document.querySelector<HTMLElement>("#empty");
+    const entries = Array.from(document.querySelectorAll<HTMLElement>("[data-entry]"));
+    const confidenceOrder = { confirmed: 0, probable: 1, disputed: 2 };
+
+    const syncFromUrl = () => {
+      const params = new URLSearchParams(location.search);
+      if (input) input.value = params.get("q") ?? "";
+      if (country) country.value = params.get("country") ?? "";
+      if (category) category.value = params.get("category") ?? "";
+      if (sort) sort.value = params.get("sort") ?? "rank";
+    };
+
+    const apply = () => {
+      if (!input || !country || !category || !sort || !catalog || !count || !empty) return;
+      const query = input.value.trim().toLocaleLowerCase();
+      const words = query.split(/\s+/).filter(Boolean);
+      let visible = 0;
+
+      entries.forEach((entry) => {
+        const text = entry.dataset.search ?? "";
+        const matches = words.every((word) => text.includes(word))
+          && (!country.value || entry.dataset.country === country.value)
+          && (!category.value || entry.dataset.category === category.value);
+        entry.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      const sorted = [...entries].sort((a, b) => {
+        if (sort.value === "name") return (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "", "en");
+        if (sort.value === "year") return Number(a.dataset.year) - Number(b.dataset.year);
+        if (sort.value === "confidence") return confidenceOrder[a.dataset.confidence as keyof typeof confidenceOrder] - confidenceOrder[b.dataset.confidence as keyof typeof confidenceOrder];
+        return (a.dataset.country ?? "").localeCompare(b.dataset.country ?? "", "zh-CN") || Number(a.dataset.rank) - Number(b.dataset.rank);
+      });
+      sorted.forEach((entry) => catalog.insertBefore(entry, empty));
+      count.textContent = `显示 ${visible} 个词条`;
+      empty.hidden = visible !== 0;
+
+      const params = new URLSearchParams();
+      if (query) params.set("q", input.value.trim());
+      if (country.value) params.set("country", country.value);
+      if (category.value) params.set("category", category.value);
+      if (sort.value !== "rank") params.set("sort", sort.value);
+      history.replaceState(null, "", `${location.pathname}${params.size ? `?${params}` : ""}${location.hash}`);
+    };
+
+    form?.addEventListener("submit", (event) => { event.preventDefault(); apply(); });
+    input?.addEventListener("input", apply);
+    country?.addEventListener("change", apply);
+    category?.addEventListener("change", apply);
+    sort?.addEventListener("change", apply);
+    clear?.addEventListener("click", () => {
+      if (input) input.value = "";
+      if (country) country.value = "";
+      if (category) category.value = "";
+      if (sort) sort.value = "rank";
+      apply();
+      input?.focus();
+    });
+    syncFromUrl();
+    apply();
+  </script>
+</BaseLayout>
