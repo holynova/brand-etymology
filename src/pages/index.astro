@@ -23,7 +23,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
       </div>
       <p class={styles.heroNote}>
         <span class={styles.heroStat}>{entries.length}</span>
-        个经过结构化整理的黄金样本。从一粒“小米”、一位胜利女神，到一条名为 Adobe 的小溪。
+        个静态词源档案：80 条深度黄金样本，外加 720 条跨国扩展编目。
       </p>
     </section>
 
@@ -53,7 +53,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
         <div class={styles.field}>
           <label for="sort">排序</label>
           <select id="sort" class={styles.select}>
-            <option value="rank">国家榜单位次</option>
+            <option value="rank">国家内收录顺序</option>
             <option value="name">名称 A–Z</option>
             <option value="year">创立年份</option>
             <option value="confidence">可信度</option>
@@ -79,7 +79,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
             data-category={item.category}
             data-rank={item.countryRank}
             data-name={item.name}
-            data-year={item.founded}
+            data-year={item.founded ?? 9999}
             data-confidence={item.confidence}
             style={`animation-delay:${Math.min(index, 10) * 45}ms`}
           >

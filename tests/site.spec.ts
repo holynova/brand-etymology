@@ -2,12 +2,12 @@ import { expect, test } from "@playwright/test";
 
 test("searches aliases and restores a clean catalog", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("显示 80 个词条")).toBeVisible();
+  await expect(page.getByText("显示 800 个词条")).toBeVisible();
   await page.getByLabel("搜索词条").fill("索尼");
   await expect(page.getByText("显示 1 个词条")).toBeVisible();
   await expect(page.getByRole("link", { name: "Sony" })).toBeVisible();
   await page.getByRole("button", { name: "清除条件" }).click();
-  await expect(page.getByText("显示 80 个词条")).toBeVisible();
+  await expect(page.getByText("显示 800 个词条")).toBeVisible();
 });
 
 test("combines country and category filters", async ({ page }) => {
@@ -36,6 +36,7 @@ test("renders local logos and country flags", async ({ page }) => {
   expect(countryLabels).toContain("🇨🇳 中国");
   expect(countryLabels).toContain("🇯🇵 日本");
   expect(countryLabels).toContain("🇩🇪 德国");
+  expect(countryLabels).toContain("🇨🇦 加拿大");
 });
 
 test("initial page load makes no third-party requests", async ({ page }) => {

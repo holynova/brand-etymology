@@ -1,4 +1,8 @@
-export const COUNTRY_CODES = ["CN", "JP", "KR", "US", "GB", "FR", "IT", "DE"] as const;
+export const COUNTRY_CODES = [
+  "CN", "JP", "KR", "US", "GB", "FR", "IT", "DE",
+  "CA", "CH", "SE", "NL", "ES", "IN", "BR", "AU", "TW", "SG",
+  "DK", "FI", "NO", "AT", "BE", "TR", "MX", "ID",
+] as const;
 export const CONFIDENCE_LEVELS = ["confirmed", "probable", "disputed"] as const;
 
 export type CountryCode = (typeof COUNTRY_CODES)[number];
@@ -28,7 +32,7 @@ export interface Brand {
   country: string;
   category: string;
   countryRank: number;
-  founded: number;
+  founded: number | null;
   ipa: string;
   reading: string;
   story: string;

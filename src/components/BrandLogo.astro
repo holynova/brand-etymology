@@ -10,8 +10,12 @@ interface Props {
 }
 
 const { id, name, detail = false, compact = false } = Astro.props;
+const isExpansionEntry = id.startsWith("x-");
+const monogram = name.replace(/[^\p{L}\p{N}]/gu, "").slice(0, 2).toUpperCase();
 ---
 <span class:list={[styles.logoFrame, detail && styles.logoDetail, compact && styles.logoCompact]} aria-hidden="true">
-  <img src={sitePath(`/logos/${id}.svg`)} alt="" loading={detail ? "eager" : "lazy"} decoding="async" />
+  {isExpansionEntry
+    ? <span class={styles.logoMonogram}>{monogram}</span>
+    : <img src={sitePath(`/logos/${id}.svg`)} alt="" loading={detail ? "eager" : "lazy"} decoding="async" />}
   <span class={styles.srOnly}>{name} 标志</span>
 </span>

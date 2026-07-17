@@ -1,7 +1,16 @@
 import type { Brand, CountryCode, Source } from "../types";
+import { expandedEntries } from "./expanded-brands";
 
 type Entry = Omit<Brand, "verifiedAt" | "sources"> & {
   source: Omit<Source, "kind" | "supports"> & { kind?: Source["kind"]; supports?: string };
+};
+
+const expansionRanking: Source = {
+  title: "Brand Finance: global brand research",
+  publisher: "Brand Finance",
+  url: "https://brandfinance.com/",
+  kind: "ranking",
+  supports: "扩展编目条目的国家与行业背景交叉核验入口",
 };
 
 const rankings: Record<CountryCode, Source> = {
@@ -13,6 +22,24 @@ const rankings: Record<CountryCode, Source> = {
   FR: { title: "France 150 2026", publisher: "Brand Finance", url: "https://brandfinance.com/press-releases/aerospatiale-finance-energie-les-nouveaux-moteurs-des-marques-francaises-en-2026", kind: "ranking", supports: "国家榜单收录与国家归属" },
   IT: { title: "Italy 100 2026", publisher: "Brand Finance", url: "https://brandfinance.com/offices/italy", kind: "ranking", supports: "国家榜单收录与国家归属" },
   DE: { title: "Germany 150 2025", publisher: "Brand Finance", url: "https://brandfinance.com/press-releases/germanys-top-brands-valued-at-e356-billion-driven-by-technology-and-leisure-sector-growth", kind: "ranking", supports: "国家榜单收录与国家归属" },
+  CA: expansionRanking,
+  CH: expansionRanking,
+  SE: expansionRanking,
+  NL: expansionRanking,
+  ES: expansionRanking,
+  IN: expansionRanking,
+  BR: expansionRanking,
+  AU: expansionRanking,
+  TW: expansionRanking,
+  SG: expansionRanking,
+  DK: expansionRanking,
+  FI: expansionRanking,
+  NO: expansionRanking,
+  AT: expansionRanking,
+  BE: expansionRanking,
+  TR: expansionRanking,
+  MX: expansionRanking,
+  ID: expansionRanking,
 };
 
 const data: Entry[] = [
@@ -669,6 +696,8 @@ data.push(...([
     source: { title: "Company profile", publisher: "Deutsche Telekom", url: "https://www.telekom.com/en/company/company-profile" }, related: ["vodafone", "softbank", "orange"],
   },
 ] satisfies Entry[]));
+
+data.push(...expandedEntries);
 
 export const brands: Brand[] = data.map(({ source, ...brand }) => ({
   ...brand,

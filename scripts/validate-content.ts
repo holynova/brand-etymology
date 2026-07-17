@@ -25,14 +25,17 @@ for (const brand of brands) {
   }
 }
 
+const legacyCountries = new Set(["CN", "JP", "KR", "US", "GB", "FR", "IT", "DE"]);
+
 for (const code of COUNTRY_CODES) {
   const count = brands.filter((brand) => brand.countryCode === code).length;
-  if (count !== 10) errors.push(`${code}: expected 10 golden entries, got ${count}`);
+  const expected = legacyCountries.has(code) ? 10 : 40;
+  if (count !== expected) errors.push(`${code}: expected ${expected} entries, got ${count}`);
   const ranks = new Set(brands.filter((brand) => brand.countryCode === code).map((brand) => brand.countryRank));
   if (ranks.size !== count) errors.push(`${code}: duplicate country ranks`);
 }
 
-if (brands.length !== 80) errors.push(`expected 80 entries, got ${brands.length}`);
+if (brands.length !== 800) errors.push(`expected 800 entries, got ${brands.length}`);
 
 if (errors.length > 0) {
   throw new Error(`Content validation failed with ${errors.length} issue(s):\n${errors.map((error) => `- ${error}`).join("\n")}`);

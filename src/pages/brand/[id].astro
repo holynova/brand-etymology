@@ -32,7 +32,7 @@ const confidence = {
         <div class={styles.detailIdentity}>
           <BrandLogo id={entry.id} name={item.name} detail />
           <div>
-            <p class={styles.eyebrow}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded}</p>
+            <p class={styles.eyebrow}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded ?? "创立年份待补"}</p>
             <h1 class={styles.detailTitle} data-pagefind-meta="title">
               <span lang="en">{item.name}</span>
               <span class={styles.detailNative}>{item.nativeName}</span>

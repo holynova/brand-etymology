@@ -40,6 +40,7 @@
 .brandIdentity { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 16px; align-items: start; }
 .logoFrame { display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid var(--rule); border-radius: 50%; background: color-mix(in oklch, var(--paper), transparent 18%); overflow: hidden; transition: border-color 160ms ease, background-color 160ms ease; }
 .logoFrame img { display: block; width: 68%; height: 68%; object-fit: contain; filter: grayscale(1) contrast(1.08); mix-blend-mode: multiply; }
+.logoMonogram { max-width: 76%; overflow: hidden; color: var(--ink); font-family: var(--font-display); font-size: .78rem; font-weight: 700; letter-spacing: -.04em; text-overflow: clip; }
 .logoDetail { width: 112px; height: 112px; border-color: var(--rule-strong); }
 .logoDetail img { width: 72%; height: 72%; }
 .logoCompact { width: 42px; height: 42px; flex: 0 0 auto; }
