@@ -1,74 +1,37 @@
-# Brand etymology design system
+# 名从何来设计系统
 
-## 1. Visual theme and atmosphere
+## 视觉立场
 
-An editorial dictionary crossed with a world atlas: warm paper, black ink, compact marginal notes, and one vermilion annotation color. The experience should feel researched and tactile, not like a SaaS directory.
+这是一个“命名索引柜”，不是品牌杂志或商品目录。访客像在冷光档案室抽出资料卡：先看到名称与证据状态，再决定是否进入完整词源链路。主色为深靛蓝，亮黄只用于提示可核验的信息，白色只留给可读的资料表面。
 
-Visual thesis: erudite, worldly, tactile. The reflex choices would have been Newsreader, Cormorant, and Instrument Serif, so the interface instead uses Literata, designed by TypeTogether for sustained digital reading, paired with Source Sans 3 and system CJK fallbacks.
+## 色彩
 
-Content plan: orient with the search and corpus count, browse by country or industry, scan concise stories, then open a full entry for pronunciation, naming lineage, background, sources, and related names.
+- 深靛蓝 `oklch(20% 0.048 264)`：导航、首页主场和详情抬头。
+- 钴蓝 `oklch(57% 0.19 259)`：检索操作与交互焦点。
+- 证据黄 `oklch(77% 0.15 88)`：已确认的状态与索引强调。
+- 冷白 `oklch(97.6% 0.006 255)`：页面底色。
+- 墨蓝 `oklch(20% 0.048 264)`：正文；辅助文字最低为 `oklch(43% 0.028 258)`。
 
-Interaction thesis: search results settle into place with a short opacity and translate transition; lineage nodes reveal from left to right; buttons compress slightly on press. All motion is disabled under `prefers-reduced-motion`.
+## 字体与层级
 
-## 2. Color palette and roles
+- Literata 处理品牌名、长标题和词源阅读，让名称有可辨认的字面个性。
+- Source Sans 3 处理筛选、来源与元数据，保证大量中文信息的扫描效率。
+- 大标题字距不小于 `-.03em`，中日韩文字不压缩字距；长标题使用 `text-wrap: balance`。
 
-- Canvas: `oklch(96.8% 0.012 79)`, warm paper.
-- Raised paper: `oklch(99% 0.006 82)`, reading surfaces.
-- Ink: `oklch(22% 0.018 58)`, primary text.
-- Muted ink: `oklch(48% 0.018 62)`, metadata.
-- Rule: `oklch(84% 0.018 74)`, dividers.
-- Vermilion: `oklch(55% 0.18 35)`, active annotations and focus.
-- Moss: `oklch(44% 0.065 142)`, confirmed evidence.
+## 卡片规则
 
-## 3. Typography rules
+- 卡片是词条的摘要档案，而不是通用容器：国家码和收录序号在左，证据状态在右，名称与词源短述居中，底部才给出国家、行业与进入档案的动作。
+- 证据状态决定色阶：已确认使用深靛底，较可信使用浅蓝，争议使用浅黄，待考证保持白底。颜色表达资料状态，不能表达品牌所属国家或行业。
+- 卡片只使用一条边框，不叠加大面积柔影；悬停仅轻微上移和改变边框，移动端取消依赖悬停的信息。
 
-- Display and reading: Literata Variable, Songti SC, Noto Serif CJK SC, serif.
-- UI and metadata: Source Sans 3 Variable, PingFang SC, Noto Sans CJK SC, sans-serif.
-- Display: clamp 48px to 96px, weight 560, line-height .92, Latin tracking -.035em.
-- H1 detail: clamp 44px to 72px, weight 560, line-height 1.
-- H2: 28px, weight 560, line-height 1.2.
-- Body: 17px, line-height 1.78 for Chinese.
-- Metadata: 13px, weight 600, line-height 1.4, tracking .05em.
+## 页面结构
 
-## 4. Component styling
+- 首页：深靛蓝命题区、检索台、响应式词条库。
+- 详情页：深靛蓝标题档案、左侧读音与置信度记录、右侧的背景、谱系、来源和相似命名。
+- 国家、类别页：使用相同的索引头和资料卡，不引入另一套视觉语言。
 
-- Buttons use a 4px radius, ink fill for primary actions, paper fill for secondary actions, and visible vermilion focus rings.
-- Search is a ruled editorial field rather than a floating pill.
-- Entries are separated by rules and whitespace. Elevated cards are reserved for the featured story and pronunciation panel.
-- Tags are square-ended annotations with a 2px radius, not pills.
+## 无障碍与响应式
 
-## 5. Layout principles
-
-- Spacing scale: 4, 8, 12, 20, 32, 48, 72, 112.
-- Desktop uses a 12-column grid with an intentionally narrow left index rail.
-- Reading measure is capped at 68ch; metadata may span wider.
-- Section spacing follows one responsive ladder rather than isolated values.
-
-## 6. Depth and elevation
-
-- Most sections are flush to the canvas and separated by hairline rules.
-- Raised paper uses `0 12px 40px rgb(55 43 31 / 8%)` with no decorative border.
-- The sticky header uses a solid paper tone, not backdrop blur.
-
-## 7. Guardrails
-
-- Do not use gradients, glass, generic three-card grids, or decorative logo scraping.
-- Do not tighten tracking on Chinese, Japanese, or Korean text.
-- Do not hide disputed origins behind a confident summary.
-- Do not use rounded rectangles when a rule or typographic shift carries hierarchy.
-- Do not load fonts, data, analytics, or search code from external domains at runtime.
-- Do show source role and confidence next to every naming claim.
-
-## 8. Responsive behavior
-
-- Breakpoints: 720px and 1040px.
-- At phone width the index rail becomes a horizontal corpus note and filters become two-column controls.
-- Every interactive target is at least 40px high.
-- Entry lineage scrolls horizontally only when its semantic order cannot wrap clearly.
-
-## 9. Agent prompt guide
-
-- Hero: canvas `oklch(96.8% 0.012 79)`, Literata 72px/0.92 weight 560, ink `oklch(22% 0.018 58)`, Latin tracking -.035em, one vermilion 4px annotation mark.
-- Search field: 64px high, transparent background, bottom rule `oklch(64% 0.035 68)`, 22px Source Sans 3, 4px radius only on the submit button.
-- Entry row: rule-separated, 24px vertical padding, 32px Literata name, 13px uppercase-like metadata without transforming CJK text, no shadow.
-- Evidence panel: raised paper `oklch(99% 0.006 82)`, 12px radius, 32px padding, moss confidence marker, 17px body at 1.78.
+- 所有正文与背景满足可读对比；焦点环使用高对比证据黄。
+- 卡片网格以 `auto-fit` 自适应，窄屏为单列；检索筛选在手机保留至少 44px 高度。
+- 动画只发生在首屏前 12 张卡片，且在 `prefers-reduced-motion` 下关闭。

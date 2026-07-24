@@ -11,58 +11,71 @@ const entries = (await getCollection("brands")).sort((a, b) =>
 );
 const countries = [...new Set(entries.map((entry) => entry.data.country))];
 const categories = [...new Set(entries.map((entry) => entry.data.category))];
-const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "有争议" };
+const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "有争议", pending: "待考证" };
+const pendingCount = entries.filter((entry) => entry.data.confidence === "pending").length;
 ---
 
 <BaseLayout>
   <div class={styles.shell}>
     <section class={styles.hero} aria-labelledby="hero-title">
-      <div>
-        <p class={styles.eyebrow}>词源 · 读音 · 文化背景 · 可核验来源</p>
-        <h1 id="hero-title" class={styles.heroTitle}><span lang="zh">每个名字，都藏着一条来路。</span></h1>
+      <div class={styles.heroCopy}>
+        <p class={styles.heroKicker}>英语品牌词源解析</p>
+        <h1 id="hero-title" class={styles.heroTitle}><span lang="zh">每一个名字，都从某处借来。</span></h1>
+        <p class={styles.heroDeck}>从一个品牌的读音出发，追到它借用的人名、地名、旧词与造词传统。结论旁保留证据等级，让故事可以被核对。</p>
       </div>
-      <p class={styles.heroNote}>
-        <span class={styles.heroStat}>{entries.length}</span>
-        个静态词源档案：80 条深度黄金样本，外加 720 条跨国扩展编目。
-      </p>
+      <aside class={styles.heroIndex} aria-label="词条库概览">
+        <p class={styles.heroIndexCount}>{entries.length}<span>份命名档案</span></p>
+        <p>{entries.length} 条均已重新整理；其中 {pendingCount} 条因命名来源证据不足标记为待考证。</p>
+        <ul class={styles.heroKeyList}>
+          <li>名称读音</li>
+          <li>命名谱系</li>
+          <li>来源证据</li>
+        </ul>
+      </aside>
     </section>
 
     <section class={styles.searchSection} aria-label="搜索与筛选">
-      <form id="search-form" class={styles.searchBar} role="search">
-        <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />
-        <button class={styles.searchButton} type="submit">查名字</button>
-      </form>
-      <div class={styles.filters}>
-        <div class={styles.field}>
-          <label for="country">国家</label>
-          <select id="country" class={styles.select}>
-            <option value="">全部国家</option>
-            {countries.map((country) => {
-              const entry = entries.find((item) => item.data.country === country)!;
-              return <option value={country}>{countryMeta[entry.data.countryCode].flag} {country}</option>;
-            })}
-          </select>
-        </div>
-        <div class={styles.field}>
-          <label for="category">类别</label>
-          <select id="category" class={styles.select}>
-            <option value="">全部类别</option>
-            {categories.map((category) => <option value={category}>{category}</option>)}
-          </select>
-        </div>
-        <div class={styles.field}>
-          <label for="sort">排序</label>
-          <select id="sort" class={styles.select}>
-            <option value="rank">国家内收录顺序</option>
-            <option value="name">名称 A–Z</option>
-            <option value="year">创立年份</option>
-            <option value="confidence">可信度</option>
-          </select>
-        </div>
+      <div class={styles.searchIntro}>
+        <p class={styles.sectionLabel}>检索词条库</p>
+        <p>可按品牌原文、中文别名、国家、行业或命名方法定位。卡片底部的状态不会把“尚未核实”伪装成结论。</p>
       </div>
-      <div class={styles.resultMeta} aria-live="polite">
-        <span id="result-count">显示 {entries.length} 个词条</span>
-        <button id="clear" class={styles.clearButton} type="button">清除条件</button>
+      <div class={styles.searchControls}>
+        <form id="search-form" class={styles.searchBar} role="search">
+          <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />
+          <button class={styles.searchButton} type="submit">检索</button>
+        </form>
+        <div class={styles.filters}>
+          <div class={styles.field}>
+            <label for="country">国家</label>
+            <select id="country" class={styles.select}>
+              <option value="">全部国家</option>
+              {countries.map((country) => {
+                const entry = entries.find((item) => item.data.country === country)!;
+                return <option value={country}>{countryMeta[entry.data.countryCode].flag} {country}</option>;
+              })}
+            </select>
+          </div>
+          <div class={styles.field}>
+            <label for="category">类别</label>
+            <select id="category" class={styles.select}>
+              <option value="">全部类别</option>
+              {categories.map((category) => <option value={category}>{category}</option>)}
+            </select>
+          </div>
+          <div class={styles.field}>
+            <label for="sort">排序</label>
+            <select id="sort" class={styles.select}>
+              <option value="rank">国家内收录顺序</option>
+              <option value="name">名称 A–Z</option>
+              <option value="year">创立年份</option>
+              <option value="confidence">可信度</option>
+            </select>
+          </div>
+        </div>
+        <div class={styles.resultMeta} aria-live="polite">
+          <span id="result-count">显示 {entries.length} 个词条</span>
+          <button id="clear" class={styles.clearButton} type="button">清除条件</button>
+        </div>
       </div>
     </section>
 
@@ -83,7 +96,10 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
             data-confidence={item.confidence}
             style={`animation-delay:${Math.min(index, 10) * 45}ms`}
           >
-            <div class={styles.rank}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {String(item.countryRank).padStart(2, "0")}</div>
+            <div class={styles.entryTop}>
+              <span class={styles.entryCode}>{item.countryCode}.{String(item.countryRank).padStart(3, "0")}</span>
+              <span class={styles.evidenceState} data-level={item.confidence}>{confidenceLabel[item.confidence]}</span>
+            </div>
             <div class={styles.brandIdentity}>
               <BrandLogo id={entry.id} name={item.name} />
               <h2 class={styles.entryName}>
@@ -93,9 +109,12 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
             </div>
             <p class={styles.entryStory}>{item.story}</p>
             <div class={styles.entryMeta}>
-              <span class={styles.tag}>{item.category}</span>
-              <span class={styles.tag}>{item.methods[0]}</span>
-              <div class={styles.confidence} data-level={item.confidence}>{confidenceLabel[item.confidence]}</div>
+              <div class={styles.entryTags}>
+                <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country}</span>
+                <span class={styles.tag}>{item.category}</span>
+                <span class={styles.tag}>{item.methods[0]}</span>
+              </div>
+              <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
             </div>
           </article>
         );
@@ -115,7 +134,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
     const count = document.querySelector<HTMLElement>("#result-count");
     const empty = document.querySelector<HTMLElement>("#empty");
     const entries = Array.from(document.querySelectorAll<HTMLElement>("[data-entry]"));
-    const confidenceOrder = { confirmed: 0, probable: 1, disputed: 2 };
+    const confidenceOrder = { confirmed: 0, probable: 1, disputed: 2, pending: 3 };
 
     const syncFromUrl = () => {
       const params = new URLSearchParams(location.search);

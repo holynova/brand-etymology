@@ -1,5 +1,6 @@
 import type { Brand, CountryCode, Source } from "../types";
 import { expandedEntries } from "./expanded-brands";
+import chatgptOrigins from "./chatgpt-name-origins.json";
 
 type Entry = Omit<Brand, "verifiedAt" | "sources"> & {
   source: Omit<Source, "kind" | "supports"> & { kind?: Source["kind"]; supports?: string };
@@ -699,11 +700,37 @@ data.push(...([
 
 data.push(...expandedEntries);
 
-export const brands: Brand[] = data.map(({ source, ...brand }) => ({
-  ...brand,
-  verifiedAt: "2026-07-16",
-  sources: [
-    { kind: source.kind ?? "official", supports: source.supports ?? "品牌历史与命名背景", ...source },
-    rankings[brand.countryCode],
-  ],
-}));
+type ChatGPTOrigin = {
+  ipa: string;
+  reading: string;
+  story: string;
+  background: string;
+  methods: string[];
+  roots: Brand["roots"];
+  confidence: "probable" | "pending";
+  evidence: string;
+};
+
+const generatedOrigins = chatgptOrigins as Record<string, ChatGPTOrigin>;
+
+export const brands: Brand[] = data.map(({ source, ...brand }) => {
+  const generated = generatedOrigins[brand.id];
+  const primarySource = { kind: source.kind ?? "official", supports: source.supports ?? "品牌历史与命名背景", ...source };
+  const baselineSources = primarySource.publisher === "ChatGPT"
+    ? (brand.id.startsWith("x-") ? [] : [rankings[brand.countryCode]])
+    : (brand.id.startsWith("x-") ? [primarySource] : [primarySource, rankings[brand.countryCode]]);
+  return {
+    ...brand,
+    ipa: generated?.ipa ?? brand.ipa,
+    reading: generated?.reading ?? brand.reading,
+    story: generated?.story ?? brand.story,
+    background: generated?.background ?? brand.background,
+    methods: generated?.methods ?? brand.methods,
+    roots: generated?.roots ?? brand.roots,
+    confidence: generated?.confidence ?? brand.confidence,
+    verifiedAt: "2026-07-16",
+    sources: generated
+      ? [{ title: "ChatGPT 辅助整理（待二次核验）", publisher: "ChatGPT", url: "https://chatgpt.com/", kind: "archive", supports: generated.evidence }, ...baselineSources]
+      : baselineSources,
+  };
+});

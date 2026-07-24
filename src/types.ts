@@ -3,7 +3,7 @@ export const COUNTRY_CODES = [
   "CA", "CH", "SE", "NL", "ES", "IN", "BR", "AU", "TW", "SG",
   "DK", "FI", "NO", "AT", "BE", "TR", "MX", "ID",
 ] as const;
-export const CONFIDENCE_LEVELS = ["confirmed", "probable", "disputed"] as const;
+export const CONFIDENCE_LEVELS = ["confirmed", "probable", "disputed", "pending"] as const;
 
 export type CountryCode = (typeof COUNTRY_CODES)[number];
 export type Confidence = (typeof CONFIDENCE_LEVELS)[number];

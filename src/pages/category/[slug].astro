@@ -20,7 +20,7 @@ const { category, entries } = Astro.props;
   <div class={styles.shell}>
     <header class={styles.countryHeader}>
       <a class={styles.back} href={sitePath("/")}>← 返回搜索</a>
-      <p class={styles.eyebrow}>CATEGORY INDEX · {entries.length} ENTRIES</p>
+      <p class={styles.indexKicker}>类别索引 · {entries.length} 个词条</p>
       <h1>{category}，如何给自己命名。</h1>
     </header>
     <CompactBrandList entries={entries} />

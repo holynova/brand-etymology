@@ -21,6 +21,7 @@ const confidence = {
   confirmed: { label: "已确认", note: "核心命名说法由品牌资料明确支持。" },
   probable: { label: "较可信", note: "主要来源一致，但仍缺少一项独立语言或档案证据。" },
   disputed: { label: "存在争议", note: "流传着不止一种解释，本页保留差异。" },
+  pending: { label: "待考证", note: "尚未获得可直接支持命名来源的资料，本页不作推断。" },
 }[item.confidence];
 ---
 
@@ -32,7 +33,7 @@ const confidence = {
         <div class={styles.detailIdentity}>
           <BrandLogo id={entry.id} name={item.name} detail />
           <div>
-            <p class={styles.eyebrow}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded ?? "创立年份待补"}</p>
+            <p class={styles.detailKicker}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded ?? "创立年份待补"}</p>
             <h1 class={styles.detailTitle} data-pagefind-meta="title">
               <span lang="en">{item.name}</span>
               <span class={styles.detailNative}>{item.nativeName}</span>
@@ -49,11 +50,11 @@ const confidence = {
     <div class={`${styles.shell} ${styles.detailBody}`}>
       <aside class={styles.aside}>
         <div class={styles.pronounce}>
-          <p class={styles.eyebrow}>怎么读</p>
+          <p class={styles.recordLabel}>读音记录</p>
           <p class={styles.pronounceIpa}>{item.ipa}</p>
           <p>{item.reading}</p>
           <div class={styles.confidence} data-level={item.confidence}>{confidence.label}</div>
-          <p class={styles.entryMeta}>{confidence.note}</p>
+          <p class={styles.evidenceNote}>{confidence.note}</p>
         </div>
       </aside>
 
@@ -90,7 +91,7 @@ const confidence = {
               </li>
             ))}
           </ol>
-          <p class={styles.entryMeta}>资料核验日期：{item.verifiedAt}。外部链接仅在你点击后访问网络。</p>
+          <p class={styles.evidenceNote}>资料核验日期：{item.verifiedAt}。外部链接仅在你点击后访问网络。</p>
         </section>
 
         {related.length > 0 && (

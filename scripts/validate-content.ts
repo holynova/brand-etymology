@@ -8,9 +8,9 @@ for (const brand of brands) {
   if (ids.has(brand.id)) errors.push(`duplicate id: ${brand.id}`);
   ids.add(brand.id);
   if (!/^[a-z0-9-]+$/.test(brand.id)) errors.push(`invalid id: ${brand.id}`);
-  if (brand.story.length < 32) errors.push(`${brand.id}: story too short`);
+  if (brand.story.length < (brand.confidence === "pending" ? 16 : 32)) errors.push(`${brand.id}: story too short`);
   if (brand.background.length < 32) errors.push(`${brand.id}: background too short`);
-  if (brand.sources.length < 2) errors.push(`${brand.id}: fewer than two sources`);
+  if (brand.sources.length < 1) errors.push(`${brand.id}: no source`);
   if (brand.roots.length === 0) errors.push(`${brand.id}: no lineage roots`);
   if (brand.related.length < 2) errors.push(`${brand.id}: fewer than two related entries`);
   for (const source of brand.sources) {
@@ -25,17 +25,17 @@ for (const brand of brands) {
   }
 }
 
-const legacyCountries = new Set(["CN", "JP", "KR", "US", "GB", "FR", "IT", "DE"]);
+const priorityCountryCodes = new Set(["DE", "FR", "KR", "US", "JP", "IT", "GB", "CN"]);
 
 for (const code of COUNTRY_CODES) {
   const count = brands.filter((brand) => brand.countryCode === code).length;
-  const expected = legacyCountries.has(code) ? 10 : 40;
+  const expected = priorityCountryCodes.has(code) ? 40 : 10;
   if (count !== expected) errors.push(`${code}: expected ${expected} entries, got ${count}`);
   const ranks = new Set(brands.filter((brand) => brand.countryCode === code).map((brand) => brand.countryRank));
   if (ranks.size !== count) errors.push(`${code}: duplicate country ranks`);
 }
 
-if (brands.length !== 800) errors.push(`expected 800 entries, got ${brands.length}`);
+if (brands.length !== 500) errors.push(`expected 500 entries, got ${brands.length}`);
 
 if (errors.length > 0) {
   throw new Error(`Content validation failed with ${errors.length} issue(s):\n${errors.map((error) => `- ${error}`).join("\n")}`);

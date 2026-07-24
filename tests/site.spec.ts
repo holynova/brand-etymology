@@ -2,19 +2,19 @@ import { expect, test } from "@playwright/test";
 
 test("searches aliases and restores a clean catalog", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("显示 800 个词条")).toBeVisible();
+  await expect(page.getByText("显示 500 个词条")).toBeVisible();
   await page.getByLabel("搜索词条").fill("索尼");
   await expect(page.getByText("显示 1 个词条")).toBeVisible();
   await expect(page.getByRole("link", { name: "Sony" })).toBeVisible();
   await page.getByRole("button", { name: "清除条件" }).click();
-  await expect(page.getByText("显示 800 个词条")).toBeVisible();
+  await expect(page.getByText("显示 500 个词条")).toBeVisible();
 });
 
 test("combines country and category filters", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("国家").selectOption("德国");
   await page.getByLabel("类别").selectOption("汽车与出行");
-  await expect(page.getByText("显示 5 个词条")).toBeVisible();
+  await expect(page.getByText("显示 8 个词条")).toBeVisible();
   await expect(page).toHaveURL(/country=/);
 });
 

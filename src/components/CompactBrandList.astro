@@ -8,8 +8,11 @@ const { entries } = Astro.props;
 ---
 <div class={styles.catalog}>
   {entries.map((entry: any) => (
-    <article class={styles.entry}>
-      <div class={styles.rank}><span class={styles.flag} aria-hidden="true">{countryMeta[entry.data.countryCode as keyof typeof countryMeta].flag}</span>{entry.data.country} · {String(entry.data.countryRank).padStart(2, "0")}</div>
+    <article class={styles.entry} data-confidence={entry.data.confidence}>
+      <div class={styles.entryTop}>
+        <span class={styles.entryCode}>{entry.data.countryCode}.{String(entry.data.countryRank).padStart(3, "0")}</span>
+        <span class={styles.evidenceState} data-level={entry.data.confidence}>{confidenceLabel[entry.data.confidence as keyof typeof confidenceLabel]}</span>
+      </div>
       <div class={styles.brandIdentity}>
         <BrandLogo id={entry.id} name={entry.data.name} />
         <h2 class={styles.entryName}>
@@ -19,9 +22,12 @@ const { entries } = Astro.props;
       </div>
       <p class={styles.entryStory}>{entry.data.story}</p>
       <div class={styles.entryMeta}>
-        <span class={styles.tag}>{entry.data.category}</span>
-        <span class={styles.tag}>{entry.data.methods[0]}</span>
-        <div class={styles.confidence} data-level={entry.data.confidence}>{confidenceLabel[entry.data.confidence as keyof typeof confidenceLabel]}</div>
+        <div class={styles.entryTags}>
+          <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[entry.data.countryCode as keyof typeof countryMeta].flag}</span>{entry.data.country}</span>
+          <span class={styles.tag}>{entry.data.category}</span>
+          <span class={styles.tag}>{entry.data.methods[0]}</span>
+        </div>
+        <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
       </div>
     </article>
   ))}

@@ -16,6 +16,7 @@ export const confidenceLabel = {
   confirmed: "已确认",
   probable: "较可信",
   disputed: "有争议",
+  pending: "待考证",
 } as const;
 
 export const countryMeta = {
