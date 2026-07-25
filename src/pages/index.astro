@@ -5,9 +5,10 @@ import BrandLogo from "../components/BrandLogo.astro";
 import styles from "../styles/site.module.css";
 import { countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
+import { getBrandIntroduction, getChineseName, getPopularityRank } from "../lib/brand-presentation";
 
 const entries = (await getCollection("brands")).sort((a, b) =>
-  a.data.country.localeCompare(b.data.country, "zh-CN") || a.data.countryRank - b.data.countryRank
+  getPopularityRank({ ...a.data, id: a.id }) - getPopularityRank({ ...b.data, id: b.id }) || a.data.name.localeCompare(b.data.name, "en")
 );
 const countries = [...new Set(entries.map((entry) => entry.data.country))];
 const categories = [...new Set(entries.map((entry) => entry.data.category))];
@@ -65,6 +66,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
           <div class={styles.field}>
             <label for="sort">排序</label>
             <select id="sort" class={styles.select}>
+              <option value="popular">热门品牌优先</option>
               <option value="rank">国家内收录顺序</option>
               <option value="name">名称 A–Z</option>
               <option value="year">创立年份</option>
@@ -82,7 +84,10 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
     <section id="catalog" class={styles.catalog} aria-label="品牌词条" data-pagefind-ignore>
       {entries.map((entry, index) => {
         const item = entry.data;
-        const searchText = [item.name, item.nativeName, item.zhName, ...item.aliases, item.country, item.category, ...item.methods, item.story].join(" ").toLocaleLowerCase();
+        const presentation = { ...item, id: entry.id };
+        const chineseName = getChineseName(presentation);
+        const introduction = getBrandIntroduction(presentation);
+        const searchText = [item.name, item.nativeName, item.zhName, chineseName, introduction, ...item.aliases, item.country, item.category, ...item.methods, item.story].join(" ").toLocaleLowerCase();
         return (
           <article
             class={styles.entry}
@@ -93,6 +98,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
             data-rank={item.countryRank}
             data-name={item.name}
             data-year={item.founded ?? 9999}
+            data-popularity={getPopularityRank(presentation)}
             data-confidence={item.confidence}
             style={`animation-delay:${Math.min(index, 10) * 45}ms`}
           >
@@ -104,10 +110,17 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
               <BrandLogo id={entry.id} name={item.name} />
               <h2 class={styles.entryName}>
                 <a href={sitePath(`/brand/${entry.id}/`)}>{item.name}</a>
-                <span class={styles.native} lang={item.countryCode === "JP" ? "ja" : item.countryCode === "KR" ? "ko" : "zh"}>{item.nativeName}</span>
+                <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
               </h2>
             </div>
-            <p class={styles.entryStory}>{item.story}</p>
+            <div class={styles.entryIntro}>
+              <span class={styles.cardLabel}>它做什么</span>
+              <p>{introduction}</p>
+            </div>
+            <div class={styles.entryStory}>
+              <span class={styles.cardLabel}>名称来历</span>
+              <p>{item.story}</p>
+            </div>
             <div class={styles.entryMeta}>
               <div class={styles.entryTags}>
                 <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country}</span>
@@ -141,7 +154,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
       if (input) input.value = params.get("q") ?? "";
       if (country) country.value = params.get("country") ?? "";
       if (category) category.value = params.get("category") ?? "";
-      if (sort) sort.value = params.get("sort") ?? "rank";
+      if (sort) sort.value = params.get("sort") ?? "popular";
     };
 
     const apply = () => {
@@ -163,6 +176,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
         if (sort.value === "name") return (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "", "en");
         if (sort.value === "year") return Number(a.dataset.year) - Number(b.dataset.year);
         if (sort.value === "confidence") return confidenceOrder[a.dataset.confidence as keyof typeof confidenceOrder] - confidenceOrder[b.dataset.confidence as keyof typeof confidenceOrder];
+        if (sort.value === "popular") return Number(a.dataset.popularity) - Number(b.dataset.popularity) || (a.dataset.name ?? "").localeCompare(b.dataset.name ?? "", "en");
         return (a.dataset.country ?? "").localeCompare(b.dataset.country ?? "", "zh-CN") || Number(a.dataset.rank) - Number(b.dataset.rank);
       });
       sorted.forEach((entry) => catalog.insertBefore(entry, empty));
@@ -173,7 +187,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
       if (query) params.set("q", input.value.trim());
       if (country.value) params.set("country", country.value);
       if (category.value) params.set("category", category.value);
-      if (sort.value !== "rank") params.set("sort", sort.value);
+      if (sort.value !== "popular") params.set("sort", sort.value);
       history.replaceState(null, "", `${location.pathname}${params.size ? `?${params}` : ""}${location.hash}`);
     };
 
@@ -186,7 +200,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
       if (input) input.value = "";
       if (country) country.value = "";
       if (category) category.value = "";
-      if (sort) sort.value = "rank";
+      if (sort) sort.value = "popular";
       apply();
       input?.focus();
     });

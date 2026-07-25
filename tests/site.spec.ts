@@ -10,6 +10,18 @@ test("searches aliases and restores a clean catalog", async ({ page }) => {
   await expect(page.getByText("显示 500 个词条")).toBeVisible();
 });
 
+test("defaults to popular brands with consistent card information", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByLabel("排序")).toHaveValue("popular");
+  const cards = page.locator("[data-entry]");
+  await expect(cards.first().getByRole("link", { name: "Apple" })).toBeVisible();
+  await expect(cards.first()).toContainText("中文名 · 苹果");
+  await expect(cards.first()).toContainText("它做什么");
+  await expect(cards.first()).toContainText("名称来历");
+  const heights = await cards.evaluateAll((items) => items.slice(0, 6).map((item) => Math.round(item.getBoundingClientRect().height)));
+  expect(new Set(heights).size).toBe(1);
+});
+
 test("combines country and category filters", async ({ page }) => {
   await page.goto("/");
   await page.getByLabel("国家").selectOption("德国");

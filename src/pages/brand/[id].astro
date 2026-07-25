@@ -5,6 +5,7 @@ import BrandLogo from "../../components/BrandLogo.astro";
 import styles from "../../styles/site.module.css";
 import { countryMeta } from "../../lib/taxonomy";
 import { sitePath } from "../../lib/paths";
+import { getBrandIntroduction, getChineseName } from "../../lib/brand-presentation";
 
 export async function getStaticPaths() {
   const entries = await getCollection("brands");
@@ -13,6 +14,9 @@ export async function getStaticPaths() {
 
 const { entry, entries } = Astro.props;
 const item = entry.data;
+const presentation = { ...item, id: entry.id };
+const chineseName = getChineseName(presentation);
+const introduction = getBrandIntroduction(presentation);
 const byId = new Map(entries.map((candidate) => [candidate.id, candidate]));
 const related = item.related
   .map((id: string) => byId.get(id))
@@ -36,15 +40,19 @@ const confidence = {
             <p class={styles.detailKicker}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded ?? "创立年份待补"}</p>
             <h1 class={styles.detailTitle} data-pagefind-meta="title">
               <span lang="en">{item.name}</span>
-              <span class={styles.detailNative}>{item.nativeName}</span>
+              <span class={styles.detailNative} lang="zh">中文名 · {chineseName}</span>
             </h1>
           </div>
         </div>
-        <p class={styles.lead}>{item.story}</p>
+        <div class={styles.detailSummary}>
+          <p class={styles.detailDescription}><span>它做什么</span>{introduction}</p>
+          <p class={styles.lead}>{item.story}</p>
+        </div>
       </div>
       <span data-pagefind-filter={`country:${item.country}`}></span>
       <span data-pagefind-filter={`category:${item.category}`}></span>
       <span data-pagefind-meta={`native:${item.nativeName}`}></span>
+      <span data-pagefind-meta={`zh-name:${chineseName}`}></span>
     </div>
 
     <div class={`${styles.shell} ${styles.detailBody}`}>

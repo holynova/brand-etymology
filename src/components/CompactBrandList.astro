@@ -3,11 +3,16 @@ import styles from "../styles/site.module.css";
 import BrandLogo from "./BrandLogo.astro";
 import { confidenceLabel, countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
+import { getBrandIntroduction, getChineseName } from "../lib/brand-presentation";
 
 const { entries } = Astro.props;
 ---
 <div class={styles.catalog}>
-  {entries.map((entry: any) => (
+  {entries.map((entry: any) => {
+    const presentation = { ...entry.data, id: entry.id };
+    const chineseName = getChineseName(presentation);
+    const introduction = getBrandIntroduction(presentation);
+    return (
     <article class={styles.entry} data-confidence={entry.data.confidence}>
       <div class={styles.entryTop}>
         <span class={styles.entryCode}>{entry.data.countryCode}.{String(entry.data.countryRank).padStart(3, "0")}</span>
@@ -17,10 +22,17 @@ const { entries } = Astro.props;
         <BrandLogo id={entry.id} name={entry.data.name} />
         <h2 class={styles.entryName}>
           <a href={sitePath(`/brand/${entry.id}/`)}>{entry.data.name}</a>
-          <span class={styles.native}>{entry.data.nativeName}</span>
+          <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
         </h2>
       </div>
-      <p class={styles.entryStory}>{entry.data.story}</p>
+      <div class={styles.entryIntro}>
+        <span class={styles.cardLabel}>它做什么</span>
+        <p>{introduction}</p>
+      </div>
+      <div class={styles.entryStory}>
+        <span class={styles.cardLabel}>名称来历</span>
+        <p>{entry.data.story}</p>
+      </div>
       <div class={styles.entryMeta}>
         <div class={styles.entryTags}>
           <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[entry.data.countryCode as keyof typeof countryMeta].flag}</span>{entry.data.country}</span>
@@ -30,5 +42,6 @@ const { entries } = Astro.props;
         <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
       </div>
     </article>
-  ))}
+    );
+  })}
 </div>
