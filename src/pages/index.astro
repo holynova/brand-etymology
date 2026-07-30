@@ -18,7 +18,13 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
 <BaseLayout>
   <div class={styles.shell}>
     <section class={styles.searchSection} aria-labelledby="catalog-title">
-      <h1 id="catalog-title" class={styles.srOnly}>英语品牌词源解析</h1>
+      <div class={styles.searchPanelHead}>
+        <div>
+          <p class={styles.monoLabel}>品牌词源检索</p>
+          <h1 id="catalog-title" class={styles.searchTitle}>从名字开始找。</h1>
+        </div>
+        <p class={styles.archiveCount}><strong>{entries.length}</strong> 个词条</p>
+      </div>
       <div class={styles.searchControls}>
         <form id="search-form" class={styles.searchBar} role="search">
           <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />

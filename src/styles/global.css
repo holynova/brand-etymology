@@ -1,25 +1,34 @@
-@import "@fontsource-variable/literata";
-@import "@fontsource-variable/source-sans-3";
+@import "@fontsource-variable/baloo-2";
 
 :root {
-  --canvas: oklch(100% 0 0);
-  --paper: oklch(99% 0.006 164);
-  --ink: oklch(20% 0.05 174);
-  --ink-soft: oklch(29% 0.06 174);
-  --muted: oklch(39% 0.032 174);
-  --rule: oklch(81% 0.032 164);
-  --rule-strong: oklch(35% 0.085 174);
-  --accent: oklch(46% 0.14 181);
-  --accent-deep: oklch(33% 0.11 178);
-  --signal: oklch(72% 0.16 63);
-  --secondary: oklch(65% 0.11 161);
-  --moss: oklch(40% 0.1 165);
-  --amber: oklch(50% 0.13 63);
-  --coral: oklch(55% 0.18 30);
-  --serif: "Literata Variable", "Songti SC", "Noto Serif CJK SC", serif;
-  --sans: "Source Sans 3 Variable", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
-  --r-sm: 3px;
-  --r-md: 8px;
+  --paper: #fff4dd;
+  --canvas: var(--paper);
+  --card: #fffdf7;
+  --ink: #26201a;
+  --ink-soft: #5c5347;
+  --muted: #877b6b;
+  --accent: #ff5c2b;
+  --sun: #ffd84d;
+  --watch: #ffb02e;
+  --watch-paper: #fff0bd;
+  --rose: #ffb9cc;
+  --sky: #a5dcff;
+  --cg-empty: #f1e3c4;
+  --rule: #f1e3c4;
+  --rule-strong: var(--ink);
+  --accent-deep: var(--accent);
+  --signal: var(--sun);
+  --border: 2px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+  --shadow-sm: 3px 3px 0 var(--ink);
+  --shadow-hero: 6px 6px 0 var(--ink);
+  --font-display: "Baloo 2 Variable", "Baloo 2", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  --serif: var(--font-display);
+  --sans: var(--font-body);
+  --r-sm: 6px;
+  --r-md: 12px;
   --r-lg: 14px;
   --z-sticky: 20;
   --z-skip: 30;
@@ -33,9 +42,9 @@ body {
   min-width: 320px;
   background: var(--canvas);
   color: var(--ink);
-  font-family: var(--sans);
-  font-size: 17px;
-  line-height: 1.68;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -43,21 +52,23 @@ a { color: inherit; }
 button, input, select { font: inherit; }
 button, a, input, select { touch-action: manipulation; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 3px solid var(--accent-deep);
-  outline-offset: 3px;
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
 }
-::selection { background: var(--accent); color: var(--paper); }
+::selection { background: var(--sun); color: var(--ink); }
 .skip-link {
   position: fixed;
   z-index: var(--z-skip);
   top: 12px;
   left: 12px;
   transform: translateY(-160%);
-  background: var(--signal);
+  border: var(--border);
+  border-radius: var(--r-sm);
+  background: var(--sun);
   color: var(--ink);
   padding: 10px 14px;
-  border-radius: var(--r-sm);
   font-weight: 700;
+  box-shadow: var(--shadow-sm);
 }
 .skip-link:focus { transform: translateY(0); }
 

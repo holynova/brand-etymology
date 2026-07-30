@@ -25,8 +25,7 @@
     "test:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@fontsource-variable/literata": "5.2.8",
-    "@fontsource-variable/source-sans-3": "5.2.9",
+    "@fontsource-variable/baloo-2": "^5.3.0",
     "@iconify-json/logos": "^1.2.11",
     "astro": "7.0.9",
     "simple-icons": "^16.26.0",
