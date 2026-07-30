@@ -1,5 +1,12 @@
 import { expect, test } from "@playwright/test";
 
+test("starts directly with search and cards", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("search")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "每一个名字，都从某处借来。" })).toHaveCount(0);
+  await expect(page.locator("#catalog")).toBeVisible();
+});
+
 test("searches aliases and restores a clean catalog", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("显示 500 个词条")).toBeVisible();
@@ -20,6 +27,12 @@ test("defaults to popular brands with consistent card information", async ({ pag
   await expect(cards.first()).toContainText("名称来历");
   const heights = await cards.evaluateAll((items) => items.slice(0, 6).map((item) => Math.round(item.getBoundingClientRect().height)));
   expect(new Set(heights).size).toBe(1);
+  const introOverflows = await page.locator("[data-entry-intro]").evaluateAll((items) =>
+    items
+      .filter((item) => item.scrollHeight > item.clientHeight + 1)
+      .map((item) => item.textContent?.trim())
+  );
+  expect(introOverflows).toEqual([]);
 });
 
 test("combines country and category filters", async ({ page }) => {

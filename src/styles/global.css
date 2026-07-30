@@ -2,18 +2,20 @@
 @import "@fontsource-variable/source-sans-3";
 
 :root {
-  --canvas: oklch(97.6% 0.006 255);
-  --paper: oklch(100% 0 0);
-  --ink: oklch(20% 0.048 264);
-  --ink-soft: oklch(29% 0.062 262);
-  --muted: oklch(43% 0.028 258);
-  --rule: oklch(84% 0.018 255);
-  --rule-strong: oklch(61% 0.055 258);
-  --accent: oklch(57% 0.19 259);
-  --accent-deep: oklch(42% 0.17 262);
-  --signal: oklch(77% 0.15 88);
-  --moss: oklch(48% 0.11 151);
-  --amber: oklch(65% 0.14 73);
+  --canvas: oklch(100% 0 0);
+  --paper: oklch(99% 0.006 164);
+  --ink: oklch(20% 0.05 174);
+  --ink-soft: oklch(29% 0.06 174);
+  --muted: oklch(39% 0.032 174);
+  --rule: oklch(81% 0.032 164);
+  --rule-strong: oklch(35% 0.085 174);
+  --accent: oklch(46% 0.14 181);
+  --accent-deep: oklch(33% 0.11 178);
+  --signal: oklch(72% 0.16 63);
+  --secondary: oklch(65% 0.11 161);
+  --moss: oklch(40% 0.1 165);
+  --amber: oklch(50% 0.13 63);
+  --coral: oklch(55% 0.18 30);
   --serif: "Literata Variable", "Songti SC", "Noto Serif CJK SC", serif;
   --sans: "Source Sans 3 Variable", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
   --r-sm: 3px;
@@ -41,10 +43,10 @@ a { color: inherit; }
 button, input, select { font: inherit; }
 button, a, input, select { touch-action: manipulation; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 3px solid color-mix(in oklch, var(--signal), white 20%);
+  outline: 3px solid var(--accent-deep);
   outline-offset: 3px;
 }
-::selection { background: color-mix(in oklch, var(--signal), white 32%); color: var(--ink); }
+::selection { background: var(--accent); color: var(--paper); }
 .skip-link {
   position: fixed;
   z-index: var(--z-skip);

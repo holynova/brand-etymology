@@ -13,33 +13,12 @@ const entries = (await getCollection("brands")).sort((a, b) =>
 const countries = [...new Set(entries.map((entry) => entry.data.country))];
 const categories = [...new Set(entries.map((entry) => entry.data.category))];
 const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "有争议", pending: "待考证" };
-const pendingCount = entries.filter((entry) => entry.data.confidence === "pending").length;
 ---
 
 <BaseLayout>
   <div class={styles.shell}>
-    <section class={styles.hero} aria-labelledby="hero-title">
-      <div class={styles.heroCopy}>
-        <p class={styles.heroKicker}>英语品牌词源解析</p>
-        <h1 id="hero-title" class={styles.heroTitle}><span lang="zh">每一个名字，都从某处借来。</span></h1>
-        <p class={styles.heroDeck}>从一个品牌的读音出发，追到它借用的人名、地名、旧词与造词传统。结论旁保留证据等级，让故事可以被核对。</p>
-      </div>
-      <aside class={styles.heroIndex} aria-label="词条库概览">
-        <p class={styles.heroIndexCount}>{entries.length}<span>份命名档案</span></p>
-        <p>{entries.length} 条均已重新整理；其中 {pendingCount} 条因命名来源证据不足标记为待考证。</p>
-        <ul class={styles.heroKeyList}>
-          <li>名称读音</li>
-          <li>命名谱系</li>
-          <li>来源证据</li>
-        </ul>
-      </aside>
-    </section>
-
-    <section class={styles.searchSection} aria-label="搜索与筛选">
-      <div class={styles.searchIntro}>
-        <p class={styles.sectionLabel}>检索词条库</p>
-        <p>可按品牌原文、中文别名、国家、行业或命名方法定位。卡片底部的状态不会把“尚未核实”伪装成结论。</p>
-      </div>
+    <section class={styles.searchSection} aria-labelledby="catalog-title">
+      <h1 id="catalog-title" class={styles.srOnly}>英语品牌词源解析</h1>
       <div class={styles.searchControls}>
         <form id="search-form" class={styles.searchBar} role="search">
           <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />
@@ -113,7 +92,7 @@ const pendingCount = entries.filter((entry) => entry.data.confidence === "pendin
                 <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
               </h2>
             </div>
-            <div class={styles.entryIntro}>
+            <div class={styles.entryIntro} data-entry-intro>
               <span class={styles.cardLabel}>它做什么</span>
               <p>{introduction}</p>
             </div>
