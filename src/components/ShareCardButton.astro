@@ -1,0 +1,33 @@
+---
+import styles from "../styles/site.module.css";
+
+interface Props {
+  id: string;
+  name: string;
+  chineseName: string;
+  country: string;
+  category: string;
+  story: string;
+  introduction: string;
+  compact?: boolean;
+}
+
+const { id, name, chineseName, country, category, story, introduction, compact = false } = Astro.props;
+const shareUrl = `https://holynova.github.io/brand-etymology/brand/${id}/`;
+---
+
+<button
+  class:list={[styles.shareCardButton, compact && styles.shareCardButtonCompact]}
+  type="button"
+  data-share-brand
+  data-share-name={name}
+  data-share-chinese={chineseName}
+  data-share-country={country}
+  data-share-category={category}
+  data-share-story={story}
+  data-share-introduction={introduction}
+  data-share-url={shareUrl}
+  aria-label={`生成 ${name} 的分享卡`}
+>
+  <span aria-hidden="true">↗</span> 分享卡
+</button>

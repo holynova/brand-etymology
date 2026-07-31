@@ -6,6 +6,7 @@ import styles from "../styles/site.module.css";
 import { countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
 import { getBrandIntroduction, getChineseName, getPopularityRank } from "../lib/brand-presentation";
+import ShareCardButton from "../components/ShareCardButton.astro";
 
 const entries = (await getCollection("brands")).sort((a, b) =>
   getPopularityRank({ ...a.data, id: a.id }) - getPopularityRank({ ...b.data, id: b.id }) || a.data.name.localeCompare(b.data.name, "en")
@@ -98,13 +99,13 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
                 <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
               </h2>
             </div>
+            <div class={styles.entryStory} data-entry-story>
+              <span class={styles.cardLabel}>名称来历</span>
+              <p>{item.story}</p>
+            </div>
             <div class={styles.entryIntro} data-entry-intro>
               <span class={styles.cardLabel}>它做什么</span>
               <p>{introduction}</p>
-            </div>
-            <div class={styles.entryStory}>
-              <span class={styles.cardLabel}>名称来历</span>
-              <p>{item.story}</p>
             </div>
             <div class={styles.entryMeta}>
               <div class={styles.entryTags}>
@@ -112,7 +113,10 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
                 <span class={styles.tag}>{item.category}</span>
                 <span class={styles.tag}>{item.methods[0]}</span>
               </div>
-              <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
+              <div class={styles.entryActions}>
+                <ShareCardButton id={entry.id} name={item.name} chineseName={chineseName} country={item.country} category={item.category} story={item.story} introduction={introduction} compact />
+                <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
+              </div>
             </div>
           </article>
         );

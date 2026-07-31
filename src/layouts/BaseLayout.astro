@@ -54,5 +54,10 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         </span>
       </div>
     </footer>
+    <script>
+      import { initBrandShare } from "../scripts/brand-share";
+
+      initBrandShare();
+    </script>
   </body>
 </html>

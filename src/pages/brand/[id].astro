@@ -6,6 +6,7 @@ import styles from "../../styles/site.module.css";
 import { countryMeta } from "../../lib/taxonomy";
 import { sitePath } from "../../lib/paths";
 import { getBrandIntroduction, getChineseName } from "../../lib/brand-presentation";
+import ShareCardButton from "../../components/ShareCardButton.astro";
 
 export async function getStaticPaths() {
   const entries = await getCollection("brands");
@@ -45,8 +46,9 @@ const confidence = {
           </div>
         </div>
         <div class={styles.detailSummary}>
+          <p class={styles.lead}><span class={styles.cardLabel}>名称来历</span>{item.story}</p>
           <p class={styles.detailDescription}><span>它做什么</span>{introduction}</p>
-          <p class={styles.lead}>{item.story}</p>
+          <ShareCardButton id={entry.id} name={item.name} chineseName={chineseName} country={item.country} category={item.category} story={item.story} introduction={introduction} />
         </div>
       </div>
       <span data-pagefind-filter={`country:${item.country}`}></span>

@@ -4,6 +4,7 @@ import BrandLogo from "./BrandLogo.astro";
 import { confidenceLabel, countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
 import { getBrandIntroduction, getChineseName } from "../lib/brand-presentation";
+import ShareCardButton from "./ShareCardButton.astro";
 
 const { entries } = Astro.props;
 ---
@@ -25,13 +26,13 @@ const { entries } = Astro.props;
           <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
         </h2>
       </div>
-      <div class={styles.entryIntro}>
-        <span class={styles.cardLabel}>它做什么</span>
-        <p>{introduction}</p>
-      </div>
-      <div class={styles.entryStory}>
+      <div class={styles.entryStory} data-entry-story>
         <span class={styles.cardLabel}>名称来历</span>
         <p>{entry.data.story}</p>
+      </div>
+      <div class={styles.entryIntro} data-entry-intro>
+        <span class={styles.cardLabel}>它做什么</span>
+        <p>{introduction}</p>
       </div>
       <div class={styles.entryMeta}>
         <div class={styles.entryTags}>
@@ -39,7 +40,10 @@ const { entries } = Astro.props;
           <span class={styles.tag}>{entry.data.category}</span>
           <span class={styles.tag}>{entry.data.methods[0]}</span>
         </div>
-        <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
+        <div class={styles.entryActions}>
+          <ShareCardButton id={entry.id} name={entry.data.name} chineseName={chineseName} country={entry.data.country} category={entry.data.category} story={entry.data.story} introduction={introduction} compact />
+          <a class={styles.cardLink} href={sitePath(`/brand/${entry.id}/`)}>查看档案 <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </article>
     );

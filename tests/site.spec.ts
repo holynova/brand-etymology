@@ -17,7 +17,7 @@ test("searches aliases and restores a clean catalog", async ({ page }) => {
   await expect(page.getByText("显示 500 个词条")).toBeVisible();
 });
 
-test("defaults to popular brands with consistent card information", async ({ page }) => {
+test("defaults to popular brands with full name origins before brand introductions", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByLabel("排序")).toHaveValue("popular");
   const cards = page.locator("[data-entry]");
@@ -25,14 +25,33 @@ test("defaults to popular brands with consistent card information", async ({ pag
   await expect(cards.first()).toContainText("中文名 · 苹果");
   await expect(cards.first()).toContainText("它做什么");
   await expect(cards.first()).toContainText("名称来历");
-  const heights = await cards.evaluateAll((items) => items.slice(0, 6).map((item) => Math.round(item.getBoundingClientRect().height)));
-  expect(new Set(heights).size).toBe(1);
-  const introOverflows = await page.locator("[data-entry-intro]").evaluateAll((items) =>
-    items
-      .filter((item) => item.scrollHeight > item.clientHeight + 1)
-      .map((item) => item.textContent?.trim())
-  );
-  expect(introOverflows).toEqual([]);
+  await expect(cards.first().getByRole("button", { name: /生成 Apple 的分享卡/ })).toBeVisible();
+  const ordering = await cards.first().evaluate((item) => {
+    const story = item.querySelector("[data-entry-story]");
+    const introduction = item.querySelector("[data-entry-intro]");
+    const storyStyle = story ? getComputedStyle(story) : null;
+    return {
+      storyBeforeIntroduction: !!story && !!introduction && Boolean(story.compareDocumentPosition(introduction) & Node.DOCUMENT_POSITION_FOLLOWING),
+      textOverflow: storyStyle?.textOverflow,
+      overflow: storyStyle?.overflow,
+    };
+  });
+  expect(ordering.storyBeforeIntroduction).toBe(true);
+  expect(ordering.textOverflow).not.toBe("ellipsis");
+  expect(ordering.overflow).toBe("visible");
+});
+
+test("generates a branded share card with full brand content and a QR code", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /生成 Apple 的分享卡/ }).click();
+  const dialog = page.locator("[data-share-dialog]");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "分享 Apple" })).toBeVisible();
+  await expect(dialog.getByText("分享卡已生成。")).toBeVisible();
+  const canvas = dialog.locator("canvas");
+  await expect(canvas).toHaveAttribute("width", /1080/);
+  await expect(canvas).toHaveAttribute("height", /[1-9]\d{3}/);
+  await expect(dialog.getByRole("button", { name: "下载 PNG" })).toBeVisible();
 });
 
 test("combines country and category filters", async ({ page }) => {
