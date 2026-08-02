@@ -33,9 +33,9 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
         </form>
         <div class={styles.filters}>
           <div class={styles.field}>
-            <label for="country">国家</label>
+            <label for="country">国家和地区</label>
             <select id="country" class={styles.select}>
-              <option value="">全部国家</option>
+              <option value="">全部国家和地区</option>
               {countries.map((country) => {
                 const entry = entries.find((item) => item.data.country === country)!;
                 return <option value={country}>{countryMeta[entry.data.countryCode].flag} {country}</option>;
@@ -53,7 +53,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
             <label for="sort">排序</label>
             <select id="sort" class={styles.select}>
               <option value="popular">热门品牌优先</option>
-              <option value="rank">国家内收录顺序</option>
+              <option value="rank">国家和地区内收录顺序</option>
               <option value="name">名称 A–Z</option>
               <option value="year">创立年份</option>
               <option value="confidence">可信度</option>

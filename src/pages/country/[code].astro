@@ -23,7 +23,7 @@ const countryCode = entries[0].data.countryCode;
   <div class={styles.shell}>
     <header class={styles.countryHeader}>
       <a class={styles.back} href={sitePath("/")}>← 返回搜索</a>
-      <p class={styles.indexKicker}>国家索引 · {entries.length} 个词条</p>
+      <p class={styles.indexKicker}>国家和地区索引 · {entries.length} 个词条</p>
       <h1><span class={styles.countryFlag} aria-hidden="true">{countryMeta[countryCode].flag}</span>{country}品牌，从名字读一遍。</h1>
     </header>
     <CompactBrandList entries={entries} />
