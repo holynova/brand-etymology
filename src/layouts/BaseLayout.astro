@@ -24,6 +24,15 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <meta name="theme-color" content="#fff4dd" />
     {canonical && <link rel="canonical" href={canonical} />}
     <title>{title}</title>
+    <script
+      is:inline
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="e01c9f78-4607-4e60-b01c-77c8190b12b4"
+      data-domains="holynova.github.io"
+      data-exclude-search="true"
+      data-exclude-hash="true"
+    ></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">跳到正文</a>
