@@ -21,7 +21,7 @@
     "content:bing": "tsx scripts/search-bing-brand-origins.ts",
     "content:links": "tsx scripts/check-links.ts",
     "assets:logos": "tsx scripts/generate-logos.ts",
-    "test": "npm run content:validate && playwright test",
+    "test": "pnpm run content:validate && pnpm exec playwright test",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {
@@ -39,7 +39,8 @@
     "@types/node": "^26.1.1",
     "pagefind": "1.5.2",
     "tsx": "latest",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "wrangler": "4.92.0"
   },
   "engines": {
     "node": ">=22"
