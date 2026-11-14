@@ -15,7 +15,7 @@ const colors = {
   card: "#fffdf7",
   ink: "#26201a",
   inkSoft: "#5c5347",
-  orange: "#ff5c2b",
+  accent: "#a6192e",
   sun: "#ffd84d",
   sky: "#a5dcff",
 };
@@ -67,7 +67,7 @@ async function renderCard(canvas: HTMLCanvasElement, payload: SharePayload) {
   context.font = '800 106px "Baloo 2 Variable", "Baloo 2", system-ui, sans-serif';
   const titleLines = wrapText(context, payload.name, 930);
   context.font = '600 46px system-ui, -apple-system, "PingFang SC", sans-serif';
-  const chineseLines = wrapText(context, `中文名 · ${payload.chineseName}`, 930);
+  const chineseLines = wrapText(context, `中文名：${payload.chineseName}`, 930);
   context.font = '500 58px system-ui, -apple-system, "PingFang SC", sans-serif';
   const storyLines = wrapText(context, payload.story, 930);
   context.font = '600 34px system-ui, -apple-system, "PingFang SC", sans-serif';
@@ -113,7 +113,7 @@ async function renderCard(canvas: HTMLCanvasElement, payload: SharePayload) {
   drawLines(context, chineseLines, x, y, 62);
   y += chineseLines.length * 62 + 38;
   context.font = '700 28px ui-monospace, "SF Mono", Menlo, monospace';
-  context.fillText(`${payload.country} · ${payload.category}`, x, y);
+  context.fillText(`${payload.country} / ${payload.category}`, x, y);
   y += 78;
 
   drawLabel(context, "名称来历", x, y);
@@ -144,8 +144,8 @@ async function renderCard(canvas: HTMLCanvasElement, payload: SharePayload) {
   context.fillStyle = colors.inkSoft;
   context.font = '700 18px ui-monospace, "SF Mono", Menlo, monospace';
   context.fillText("扫码看完整档案", qrX - 8, qrY - 30);
-  context.fillText("名从何来 · holynova.github.io", x, height - 78);
-  context.fillStyle = colors.orange;
+  context.fillText("名从何来 / holynova.github.io", x, height - 78);
+  context.fillStyle = colors.accent;
   context.fillRect(x, height - 54, 340, 7);
 }
 
@@ -182,7 +182,7 @@ export const initBrandShare = () => {
   dialog.dataset.shareDialog = "";
   dialog.innerHTML = `
     <div class="brand-share-dialog__head">
-      <div><p class="brand-share-dialog__label">SHARE CARD</p><h2 class="brand-share-dialog__title"></h2></div>
+      <div><p class="brand-share-dialog__label">分享卡</p><h2 class="brand-share-dialog__title"></h2></div>
       <button class="brand-share-dialog__close" type="button" aria-label="关闭分享卡">×</button>
     </div>
     <p class="brand-share-dialog__hint">已将完整名称来历、品牌简介和二维码排入图片。</p>

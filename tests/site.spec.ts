@@ -22,7 +22,7 @@ test("defaults to popular brands with full name origins before brand introductio
   await expect(page.getByLabel("排序")).toHaveValue("popular");
   const cards = page.locator("[data-entry]");
   await expect(cards.first().getByRole("link", { name: "Apple" })).toBeVisible();
-  await expect(cards.first()).toContainText("中文名 · 苹果");
+  await expect(cards.first()).toContainText("中文名：苹果");
   await expect(cards.first()).toContainText("它做什么");
   await expect(cards.first()).toContainText("名称来历");
   await expect(cards.first().getByRole("button", { name: /生成 Apple 的分享卡/ })).toBeVisible();

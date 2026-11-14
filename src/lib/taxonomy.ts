@@ -15,7 +15,7 @@ export const categorySlugs: Record<string, string> = {
 export const confidenceLabel = {
   confirmed: "已确认",
   probable: "较可信",
-  disputed: "有争议",
+  disputed: "存在争议",
   pending: "待考证",
 } as const;
 

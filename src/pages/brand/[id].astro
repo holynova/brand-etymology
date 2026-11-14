@@ -38,10 +38,10 @@ const confidence = {
         <div class={styles.detailIdentity}>
           <BrandLogo id={entry.id} name={item.name} detail />
           <div>
-            <p class={styles.detailKicker}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} · {item.category} · {item.founded ?? "创立年份待补"}</p>
+            <p class={styles.detailKicker}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country} / {item.category} / {item.founded ?? "创立年份待补"}</p>
             <h1 class={styles.detailTitle} data-pagefind-meta="title">
               <span lang="en">{item.name}</span>
-              <span class={styles.detailNative} lang="zh">中文名 · {chineseName}</span>
+              <span class={styles.detailNative} lang="zh">中文名：{chineseName}</span>
             </h1>
           </div>
         </div>
@@ -96,7 +96,7 @@ const confidence = {
                 <span class={styles.sourceIndex}>{String(index + 1).padStart(2, "0")}</span>
                 <div>
                   <a href={source.url} rel="noreferrer" target="_blank">{source.title} ↗</a>
-                  <small>{source.publisher} · 支持：{source.supports}</small>
+                  <small>{source.publisher}，支持：{source.supports}</small>
                 </div>
               </li>
             ))}
@@ -113,7 +113,7 @@ const confidence = {
                   <BrandLogo id={candidate.id} name={candidate.data.name} compact />
                   <div>
                     <strong>{candidate.data.name}</strong>
-                    <span><span class={styles.flag} aria-hidden="true">{countryMeta[candidate.data.countryCode].flag}</span>{candidate.data.country} · {candidate.data.methods[0]}</span>
+                    <span><span class={styles.flag} aria-hidden="true">{countryMeta[candidate.data.countryCode].flag}</span>{candidate.data.country} / {candidate.data.methods[0]}</span>
                   </div>
                 </a>
               ))}

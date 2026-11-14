@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BrandLogo from "../components/BrandLogo.astro";
 import styles from "../styles/site.module.css";
-import { countryMeta } from "../lib/taxonomy";
+import { categorySlugs, countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
 import { getBrandIntroduction, getChineseName, getPopularityRank } from "../lib/brand-presentation";
 import ShareCardButton from "../components/ShareCardButton.astro";
@@ -13,7 +13,7 @@ const entries = (await getCollection("brands")).sort((a, b) =>
 );
 const countries = [...new Set(entries.map((entry) => entry.data.country))];
 const categories = [...new Set(entries.map((entry) => entry.data.category))];
-const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "有争议", pending: "待考证" };
+const confidenceLabel = { confirmed: "已确认", probable: "较可信", disputed: "存在争议", pending: "待考证" };
 ---
 
 <BaseLayout>
@@ -21,7 +21,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
     <section class={styles.searchSection} aria-labelledby="catalog-title">
       <div class={styles.searchPanelHead}>
         <div>
-          <p class={styles.monoLabel}>品牌词源检索</p>
+          <p class={styles.monoLabel}>品牌词源搜索</p>
           <h1 id="catalog-title" class={styles.searchTitle}>从名字开始找。</h1>
         </div>
         <p class={styles.archiveCount}><strong>{entries.length}</strong> 个词条</p>
@@ -29,7 +29,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
       <div class={styles.searchControls}>
         <form id="search-form" class={styles.searchBar} role="search">
           <input id="search" class={styles.searchInput} type="search" name="q" autocomplete="off" placeholder="搜索 Sony、索尼、ソニー或“神话”" aria-label="搜索词条" />
-          <button class={styles.searchButton} type="submit">检索</button>
+          <button class={styles.searchButton} type="submit">搜索</button>
         </form>
         <div class={styles.filters}>
           <div class={styles.field}>
@@ -96,7 +96,7 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
               <BrandLogo id={entry.id} name={item.name} />
               <h2 class={styles.entryName}>
                 <a href={sitePath(`/brand/${entry.id}/`)}>{item.name}</a>
-                <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
+                <span class={styles.zhName} lang="zh">中文名：{chineseName}</span>
               </h2>
             </div>
             <div class={styles.entryStory} data-entry-story>
@@ -109,8 +109,8 @@ const confidenceLabel = { confirmed: "已确认", probable: "较可信", dispute
             </div>
             <div class={styles.entryMeta}>
               <div class={styles.entryTags}>
-                <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country}</span>
-                <span class={styles.tag}>{item.category}</span>
+                <a class={styles.tag} href={sitePath(`/country/${item.countryCode.toLowerCase()}/`)}><span class={styles.flag} aria-hidden="true">{countryMeta[item.countryCode].flag}</span>{item.country}</a>
+                <a class={styles.tag} href={sitePath(`/category/${categorySlugs[item.category]}/`)}>{item.category}</a>
                 <span class={styles.tag}>{item.methods[0]}</span>
               </div>
               <div class={styles.entryActions}>
