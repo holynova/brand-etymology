@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nativeName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "zhName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "countryCode": {
+      "type": "string",
+      "enum": [
+        "CN",
+        "JP",
+        "KR",
+        "US",
+        "GB",
+        "FR",
+        "IT",
+        "DE",
+        "CA",
+        "CH",
+        "SE",
+        "NL",
+        "ES",
+        "IN",
+        "BR",
+        "AU",
+        "TW",
+        "SG",
+        "DK",
+        "FI",
+        "NO",
+        "AT",
+        "BE",
+        "TR",
+        "MX",
+        "ID"
+      ]
+    },
+    "country": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "countryRank": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 100
+    },
+    "founded": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1600,
+          "maximum": 2026
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ipa": {
+      "type": "string",
+      "minLength": 3
+    },
+    "reading": {
+      "type": "string",
+      "minLength": 1
+    },
+    "story": {
+      "type": "string",
+      "minLength": 16
+    },
+    "background": {
+      "type": "string",
+      "minLength": 16
+    },
+    "methods": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "roots": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1
+          },
+          "meaning": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "label",
+          "language",
+          "meaning"
+        ]
+      }
+    },
+    "sources": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "publisher": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "official",
+              "ranking",
+              "dictionary",
+              "archive",
+              "report"
+            ]
+          },
+          "supports": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "title",
+          "publisher",
+          "url",
+          "kind",
+          "supports"
+        ]
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "probable",
+        "disputed",
+        "pending"
+      ]
+    },
+    "related": {
+      "minItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verifiedAt": {
+      "type": "string"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "nativeName",
+    "zhName",
+    "aliases",
+    "countryCode",
+    "country",
+    "category",
+    "countryRank",
+    "founded",
+    "ipa",
+    "reading",
+    "story",
+    "background",
+    "methods",
+    "roots",
+    "sources",
+    "confidence",
+    "related",
+    "verifiedAt"
+  ]
+}
