@@ -1,7 +1,7 @@
 ---
 import styles from "../styles/site.module.css";
 import BrandLogo from "./BrandLogo.astro";
-import { confidenceLabel, countryMeta } from "../lib/taxonomy";
+import { categorySlugs, confidenceLabel, countryMeta } from "../lib/taxonomy";
 import { sitePath } from "../lib/paths";
 import { getBrandIntroduction, getChineseName } from "../lib/brand-presentation";
 import ShareCardButton from "./ShareCardButton.astro";
@@ -23,7 +23,7 @@ const { entries } = Astro.props;
         <BrandLogo id={entry.id} name={entry.data.name} />
         <h2 class={styles.entryName}>
           <a href={sitePath(`/brand/${entry.id}/`)}>{entry.data.name}</a>
-          <span class={styles.zhName} lang="zh">中文名 · {chineseName}</span>
+          <span class={styles.zhName} lang="zh">中文名：{chineseName}</span>
         </h2>
       </div>
       <div class={styles.entryStory} data-entry-story>
@@ -36,8 +36,8 @@ const { entries } = Astro.props;
       </div>
       <div class={styles.entryMeta}>
         <div class={styles.entryTags}>
-          <span class={styles.tag}><span class={styles.flag} aria-hidden="true">{countryMeta[entry.data.countryCode as keyof typeof countryMeta].flag}</span>{entry.data.country}</span>
-          <span class={styles.tag}>{entry.data.category}</span>
+          <a class={styles.tag} href={sitePath(`/country/${entry.data.countryCode.toLowerCase()}/`)}><span class={styles.flag} aria-hidden="true">{countryMeta[entry.data.countryCode as keyof typeof countryMeta].flag}</span>{entry.data.country}</a>
+          <a class={styles.tag} href={sitePath(`/category/${categorySlugs[entry.data.category]}/`)}>{entry.data.category}</a>
           <span class={styles.tag}>{entry.data.methods[0]}</span>
         </div>
         <div class={styles.entryActions}>
