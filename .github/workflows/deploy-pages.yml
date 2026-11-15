@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:pages
+      - name: Publish docs to gh-pages
+        run: |
+          cp -r docs /tmp/site
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan gh-pages
+          git rm -rf . || true
+          cp -r /tmp/site/. .
+          touch .nojekyll
+          git add -A
+          git commit -m "Deploy site from master ${GITHUB_SHA}"
+          git push --force origin gh-pages
