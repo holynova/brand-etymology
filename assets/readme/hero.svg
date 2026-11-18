@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="360" viewBox="0 0 1200 360"
+     role="img" aria-labelledby="title desc">
+  <title id="title">名从何来 — 品牌名称词源库</title>
+  <desc id="desc">暖纸底标题：名从何来，每个名字都藏着一条来路；右侧是 Sony 的词源拆解卡：sonus 拉丁语声音 + sonny 英语口语年轻人，读音 /'səʊni/，证据状态较可信。</desc>
+
+  <rect width="1200" height="360" rx="26" fill="#fff4dd"/>
+
+  <g id="title-block" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="56" y="62" font-size="19" letter-spacing="3" fill="#6b5f4d">品牌名称词源库 · BRAND ETYMOLOGY</text>
+    <text x="56" y="130" font-size="64" font-weight="700" fill="#26201a">名从何来</text>
+    <text x="56" y="170" font-size="23" fill="#a6192e">每个名字，都藏着一条来路</text>
+    <text x="56" y="204" font-size="19" fill="#6b5f4d">500 个品牌、26 个国家/地区，词源、读音、文化背景。</text>
+    <g id="chips" font-size="18" fill="#26201a" text-anchor="middle">
+      <g><rect x="56" y="238" width="126" height="36" rx="18" fill="#fffdf7" stroke="#26201a" stroke-width="1.5"/><text x="119" y="262">500 个品牌</text></g>
+      <g><rect x="194" y="238" width="144" height="36" rx="18" fill="#fffdf7" stroke="#26201a" stroke-width="1.5"/><text x="266" y="262">26 国家/地区</text></g>
+      <g><rect x="350" y="238" width="126" height="36" rx="18" fill="#fffdf7" stroke="#26201a" stroke-width="1.5"/><text x="413" y="262">4 档证据</text></g>
+      <g><rect x="488" y="238" width="126" height="36" rx="18" fill="#fffdf7" stroke="#26201a" stroke-width="1.5"/><text x="551" y="262">分享卡</text></g>
+    </g>
+  </g>
+
+  <g id="etymology-card" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <text x="740" y="46" font-size="18" fill="#6b5f4d">词条长这样 · 以 Sony 为例</text>
+    <g id="card-shadow">
+      <rect x="746" y="62" width="420" height="206" rx="14" fill="#26201a"/>
+    </g>
+    <g id="card">
+      <rect x="740" y="56" width="420" height="206" rx="14" fill="#fffdf7" stroke="#26201a" stroke-width="2"/>
+      <text x="764" y="106" font-size="44" font-weight="700" fill="#26201a">Sony</text>
+      <text x="884" y="104" font-size="19" fill="#6b5f4d">/'səʊni/ · 索尼</text>
+      <g id="confidence-sticker">
+        <rect x="1040" y="76" width="96" height="30" rx="15" fill="#ffd84d" stroke="#26201a" stroke-width="1.5"/>
+        <text x="1088" y="97" font-size="18" fill="#26201a" text-anchor="middle">较可信</text>
+      </g>
+      <line x1="764" y1="126" x2="1136" y2="126" stroke="#e8ddc2" stroke-width="2"/>
+      <text x="764" y="162" font-size="22" font-weight="700" fill="#a6192e">= sonus</text>
+      <text x="872" y="162" font-size="19" fill="#26201a">拉丁语 · 声音</text>
+      <text x="764" y="198" font-size="22" font-weight="700" fill="#a6192e">+ sonny</text>
+      <text x="872" y="198" font-size="19" fill="#26201a">英语口语 · 年轻人</text>
+      <text x="764" y="238" font-size="18" fill="#6b5f4d">1958 年改名，用于国际化品牌。</text>
+    </g>
+    <g id="card-note" text-anchor="middle">
+      <text x="950" y="306" font-size="19" fill="#6b5f4d">每条词源都标注证据状态与来源</text>
+    </g>
+  </g>
+</svg>
